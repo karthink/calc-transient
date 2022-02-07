@@ -141,7 +141,6 @@
 (transient-define-prefix calc-transient-statistics () [])
 (transient-define-prefix calc-transient-binary/business () [])
 (transient-define-prefix calc-transient-convert () [])
-(transient-define-prefix calc-transient-display () [])
 (transient-define-prefix calc-transient-store () [])
 (transient-define-prefix calc-transient-trail () [])
 (transient-define-prefix calc-transient-arrays () [])
@@ -151,33 +150,30 @@
 (transient-define-prefix calc-transient-select () []) 
 (transient-define-prefix calc-transient-user () []) 
 
+;; (setq calc-transient-alg-entries 
+;;       (let ((entries-alist))
+;;         (cl-loop for (key cmd heading) in calc-transient-alg-map
+;;                  do
+;;                  (let ((entry (alist-get heading entries-alist
+;;                                          nil nil 'equal)))
+;;                    (setf (alist-get heading entries-alist nil nil 'equal)
+;;                          (cons (list (substring key 1)
+;;                                      (substring (symbol-name cmd) 5)
+;;                                      cmd)
+;;                                entry))
+;;                    (message "%s" key))
+;;                  finally return entries-alist)))
 
+;; (defmacro calc-transient--make-prefix (prefix-name)
+;;   `(transient-define-prefix ,(intern (concat "calc-transient-" prefix-name))
+;;      "calc transient"
+;;      [
+;;       ,@(cl-loop for (heading . entries) in
+;;                 (symbol-value (intern (concat "calc-transient-" prefix-name "-entries")))
+;;                 collect `[ ,heading ,@entries ])
+;;       ]))
 
-
-(setq calc-transient-alg-entries 
-      (let ((entries-alist))
-        (cl-loop for (key cmd heading) in calc-transient-alg-map
-                 do
-                 (let ((entry (alist-get heading entries-alist
-                                         nil nil 'equal)))
-                   (setf (alist-get heading entries-alist nil nil 'equal)
-                         (cons (list (substring key 1)
-                                     (substring (symbol-name cmd) 5)
-                                     cmd)
-                               entry))
-                   (message "%s" key))
-                 finally return entries-alist)))
-
-(defmacro calc-transient--make-prefix (prefix-name)
-  `(transient-define-prefix ,(intern (concat "calc-transient-" prefix-name))
-     "calc transient"
-     [
-      ,@(cl-loop for (heading . entries) in
-                (symbol-value (intern (concat "calc-transient-" prefix-name "-entries")))
-                collect `[ ,heading ,@entries ])
-      ]))
-
-(calc-transient--make-prefix "alg")
+;; (calc-transient--make-prefix "alg")
 
 (transient-define-prefix calc-transient-alg "calc transient"
   
@@ -383,3 +379,36 @@
     ("N" "minimum" calc-vector-min)
     ("F" "flatten" (lambda () (interactive)
                      (calcFunc-vflat)))]])
+
+(define-key calc-mode-map "u" #'calc-transient-units)
+
+(transient-define-prefix calc-transient-display ()
+  "A transient for display specification in calc."
+  [:class transient-row
+          ("M-x" "find command" calc-execute-extended-command)
+          ("M-i" "open info" calc-info )
+          ("r" "rewrite" calc-rewrite)]
+  [["Radix"
+    ("r" "set" calc-radix)
+    ("0" "decimal" calc-decimal-radix)
+    ("2" "binary" calc-binary-radix)
+    ("6" "hex" calc-hex-radix)
+    ("8" "octal" calc-octal-radix)
+    ("z" "leading zeros" calc-leading-zeros)
+    "Group..."
+    ("g" "group?" calc-group-digits)
+    ("," "group char" calc-group-char)
+    ("." "point char" calc-point-char)]
+   ["Floating pt"
+    ("n" "normal" calc-normal-notation)
+    ("f" "fixed pt" calc-fix-notation)
+    ("s" "scientific" calc-sci-notation)
+    ("e" "engineering" calc-eng-notation)
+    "Complex"
+    ("i" "i notation" calc-i-notation)
+    ("j" "j notation" calc-j-notation)
+    ]
+   [("o" "fraction char" calc-over-notation)
+    ]
+   ]
+  )
