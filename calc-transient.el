@@ -1,3 +1,4 @@
+(require 'calc)
 (require 'transient)
 ;; http://0x0.st/o-cL.png
 
@@ -26,9 +27,6 @@
   :variable calc-hyperbolic-flag
   :reader (lambda (&rest args) (interactive)
             (setq calc-hyperbolic-flag (not calc-hyperbolic-flag))))
-
-(define-key calc-mode-map (kbd "SPC") #'calc-transient)
-(define-key calc-mode-map (kbd "m") #'calc-transient-modes)
 
 ;; TODO Handle calc-total-algebraic-mode
 (transient-define-prefix calc-transient-modes ()
@@ -237,7 +235,6 @@
     ("p" "poly-interp" calc-poly-interp)]
 ])
 
-(define-key calc-mode-map (kbd "a") #'calc-transient-alg)
 
 ;; TODO: Enable digits and minus as prefix-arguments in this (and other)
 ;; transients
@@ -334,8 +331,6 @@
     ("=" "reduce with rows" (lambda () (interactive) (calcFunc-reducer)))
     ("|" "reduce with cols" (lambda () (interactive) (calcFunc-reducec)))])
 
-(define-key calc-mode-map (kbd "M-v") 'calc-transient-vector)
-
 ;; TODO add calc-quick-units support for u-1 through u-0
 ;; TODO logarithmic units (info "(calc) Logarithmic Units")
 ;; TODO calc-vector-mean-error 'I u M'
@@ -380,8 +375,6 @@
     ("F" "flatten" (lambda () (interactive)
                      (calcFunc-vflat)))]])
 
-(define-key calc-mode-map "u" #'calc-transient-units)
-
 (transient-define-prefix calc-transient-display ()
   "A transient for display specification in calc."
   [:class transient-row
@@ -412,3 +405,21 @@
     ]
    ]
   )
+
+(defvar calc-transient-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "u" #'calc-transient-units)
+    (define-key map "v" #'calc-transient-vector)
+    (define-key map "a" #'calc-transient-alg)
+    (define-key map (kbd "SPC") #'calc-transient)
+    (define-key map (kbd "?") #'calc-transient)
+    (define-key map (kbd "m") #'calc-transient-modes)
+    map))
+
+(define-minor-mode calc-transient-mode
+  "Transient based UI for calc."
+  :lighter nil
+  :global nil
+  (if calc-transient-mode
+      (progn (unless (eq major-mode 'calc-mode)
+               (user-err "Not in calc-mode!")))))
