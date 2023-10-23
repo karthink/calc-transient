@@ -12,7 +12,7 @@
 ;; calc-trail-mode-map                     
 ;; calc-fancy-prefix-map 
 
-(transient-define-infix calc-transient-inverse
+(transient-define-infix calc-transient-inverse ()
   :key "I"
   :class transient-lisp-variable
   :prompt "Inverse.."
@@ -20,7 +20,7 @@
   :reader (lambda (&rest args) (interactive)
             (setq calc-option-flag (not calc-option-flag))))
 
-(transient-define-infix calc-transient-hyperbolic
+(transient-define-infix calc-transient-hyperbolic ()
   :key "H"
   :class transient-lisp-variable
   :prompt "Hyperbolic.."
@@ -124,7 +124,7 @@
     ("a" "Algebra" calc-transient-alg)
     ("b" "Binary/Business" calc-transient-binary/business)
     ("k" "Statistics" calc-transient-statistics)
-    ("v" "Arrays" calc-transient-arrays)
+    ("v" "Arrays" calc-transient-vector)
     ("u" "Units" calc-transient-units)]
 
    [""
@@ -173,7 +173,7 @@
 
 ;; (calc-transient--make-prefix "alg")
 
-(transient-define-prefix calc-transient-alg "calc transient"
+(transient-define-prefix calc-transient-alg () "calc transient"
   
   [:class transient-row
    ("M-x" "find command" calc-execute-extended-command)
