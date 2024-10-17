@@ -140,7 +140,6 @@
 (transient-define-prefix calc-transient-binary/business () [])
 (transient-define-prefix calc-transient-convert () [])
 (transient-define-prefix calc-transient-store () [])
-(transient-define-prefix calc-transient-trail () [])
 (transient-define-prefix calc-transient-arrays () [])
 (transient-define-prefix calc-transient-functions () [])
 (transient-define-prefix calc-transient-grahpics () [])
@@ -405,6 +404,31 @@
     ]
    ]
   )
+
+(transient-define-prefix calc-transient-trail ()
+  "A transient for time and trail calculations in calc."
+  [:class transient-row
+    ("M-x" "find command" calc-execute-extended-command)
+    ("M-i" "open info" calc-info )
+    ("r" "rewrite" calc-rewrite)]
+  ["Convert Date"
+   ("D" "to number" calc-date)
+   ("J" "to Julian" calc-julian)
+   ("U" "to Unix time" calc-unix-time)
+   ("C" "to time zone" calc-convert-time-zones)]
+  [["Insert Date"
+    ("N" "Now" calc-now)
+    ("Y" "Year" calc-new-year)
+    ("M" "Month" calc-new-month)
+    ("W" "Week" calc-new-week)]
+   ["Extract Date"
+    ("P" "part (with M-)" calc-date-part)
+   "Manipulate Date"
+    ("I" "Increment month" calc-inc-month)
+    ("+" "Add business days" calc-business-days-plus)
+    ("-" "Sub business days" calc-business-days-minus)]
+   ])
+
 
 (defvar calc-transient-mode-map
   (let ((map (make-sparse-keymap)))
